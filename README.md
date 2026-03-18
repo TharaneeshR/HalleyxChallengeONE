@@ -1,37 +1,41 @@
-# Halleyx Workflow Engine
 
-A full-stack workflow automation system with dynamic rule evaluation, multi-step execution, approvals, notifications, and audit logging.
 
----
+# 🚀 Halleyx Workflow Engine
 
-## Tech Stack
-
-| Layer     | Technology                              |
-|-----------|-----------------------------------------|
-| Backend   | Java 17, Spring Boot 3.2, Spring Data JPA |
-| Database  | MySQL 8.x                               |
-| Frontend  | React 18, Vite, Tailwind CSS            |
-| Build     | Maven 3.9+, Node 18+                   |
+A full-stack workflow automation system with **dynamic rule evaluation, multi-step execution, approvals, notifications, and audit logging**. 
 
 ---
 
-## Project Structure
+## 🧱 Tech Stack
 
-```
+| Layer      | Technology                                |
+| ---------- | ----------------------------------------- |
+| Backend    | Java 17, Spring Boot 3.2, Spring Data JPA |
+| Database   | MySQL 8.x                                 |
+| Frontend   | React 18, Vite, Tailwind CSS              |
+| Build Tool | Maven 3.9+, Node 18+                      |
+
+---
+
+## 📁 Project Structure
+
+```bash
 workflow-engine/
+│
 ├── backend/
 │   ├── pom.xml
 │   └── src/main/java/com/halleyx/workflow/
 │       ├── WorkflowEngineApplication.java
 │       ├── config/          # CORS, Jackson, DataSeeder
-│       ├── controller/      # WorkflowController, StepController, RuleController, ExecutionController
-│       ├── dto/             # Request/Response DTOs, PageResponse
-│       ├── engine/          # RuleEngine, WorkflowExecutionEngine
-│       ├── entity/          # Workflow, Step, Rule, Execution
+│       ├── controller/      # APIs (Workflow, Step, Rule, Execution)
+│       ├── dto/             # Request/Response DTOs
+│       ├── engine/          # RuleEngine, ExecutionEngine
+│       ├── entity/          # DB Entities
 │       ├── enums/           # StepType, ExecutionStatus
-│       ├── exception/       # GlobalExceptionHandler, custom exceptions
-│       ├── repository/      # JPA repositories
-│       └── service/         # Service interfaces + impl
+│       ├── exception/       # Global handlers
+│       ├── repository/      # JPA Repositories
+│       └── service/         # Business logic
+│
 └── frontend/
     ├── package.json
     ├── vite.config.js
@@ -40,54 +44,59 @@ workflow-engine/
         ├── App.jsx
         ├── main.jsx
         ├── components/
-        │   ├── audit/        # AuditLog, ExecutionLogsModal
-        │   ├── common/       # Layout, Toast, Modal, Badge, Spinner
-        │   └── workflow/     # WorkflowList, WorkflowEditor, StepFormModal, RuleEditor
-        ├── execution/        # WorkflowExecute
-        ├── services/         # api.js (Axios)
-        ├── styles/           # index.css
-        └── utils/            # helpers.js
+        │   ├── audit/
+        │   ├── common/
+        │   └── workflow/
+        ├── execution/
+        ├── services/
+        ├── styles/
+        └── utils/
 ```
 
 ---
 
-## Prerequisites
+## ⚙️ Prerequisites
 
-- Java 17+
-- Maven 3.9+
-- MySQL 8.x (running on localhost:3306)
-- Node.js 18+ and npm
+* Java 17+
+* Maven 3.9+
+* MySQL 8.x (localhost:3306)
+* Node.js 18+
 
 ---
 
-## Setup & Run
+## 🛠️ Setup & Run
 
-### 1. Database
+### 1️⃣ Database Setup
 
-```bash
+```sql
 mysql -u root -p
 CREATE DATABASE workflow_db;
 EXIT;
 ```
 
-> The app will auto-create tables via `spring.jpa.hibernate.ddl-auto=update`.  
-> Two sample workflows are seeded automatically on first run.
+> Tables will be auto-created using JPA (`ddl-auto=update`)
+> Sample workflows are auto-seeded on first run
 
-### 2. Backend
+---
+
+### 2️⃣ Backend Setup
 
 ```bash
 cd backend
 
-# Configure DB credentials in src/main/resources/application.properties
-# spring.datasource.username=root
-# spring.datasource.password=your_password
+# Configure DB in application.properties
+spring.datasource.username=root
+spring.datasource.password=your_password
 
 ./mvnw clean spring-boot:run
 ```
 
-Backend starts on **http://localhost:8080**
+🔗 Backend URL:
+👉 [http://localhost:8080](http://localhost:8080)
 
-### 3. Frontend
+---
+
+### 3️⃣ Frontend Setup
 
 ```bash
 cd frontend
@@ -95,191 +104,187 @@ npm install
 npm run dev
 ```
 
-Frontend starts on **http://localhost:5173**  
-API calls are proxied to `localhost:8080` via Vite proxy config.
+🔗 Frontend URL:
+👉 [http://localhost:5173](http://localhost:5173)
+
+> API requests are proxied to backend via Vite
 
 ---
 
-## API Reference
+## 🔗 API Reference
 
-### Workflows
-```
-POST   /api/workflows                     Create workflow
-GET    /api/workflows?search=&isActive=&page=&size=   List (paginated)
-GET    /api/workflows/:id                 Get with steps & rules
-PUT    /api/workflows/:id                 Update (increments version)
-DELETE /api/workflows/:id                 Delete
-```
+### 📌 Workflows
 
-### Steps
-```
-POST   /api/workflows/:workflowId/steps   Add step
-GET    /api/workflows/:workflowId/steps   List steps
-PUT    /api/steps/:id                     Update step
-DELETE /api/steps/:id                     Delete step
-```
-
-### Rules
-```
-POST   /api/steps/:stepId/rules           Add rule
-GET    /api/steps/:stepId/rules           List rules
-PUT    /api/rules/:id                     Update rule
-DELETE /api/rules/:id                     Delete rule
-```
-
-### Executions
-```
-POST   /api/workflows/:workflowId/execute  Start execution
-GET    /api/executions/:id                 Get status & logs
-POST   /api/executions/:id/cancel          Cancel
-POST   /api/executions/:id/retry           Retry failed step
-GET    /api/executions?workflowId=&status=&page=&size=  List (audit log)
+```http
+POST   /api/workflows
+GET    /api/workflows?search=&isActive=&page=&size=
+GET    /api/workflows/{id}
+PUT    /api/workflows/{id}
+DELETE /api/workflows/{id}
 ```
 
 ---
 
-## Rule Engine
+### 📌 Steps
 
-Rules are evaluated per step in **priority order** (lowest = first).
-
-### Supported Operators
-
-| Type       | Operators / Functions                                  |
-|------------|--------------------------------------------------------|
-| Comparison | `==`, `!=`, `<`, `>`, `<=`, `>=`                      |
-| Logical    | `&&` (AND), `\|\|` (OR)                               |
-| String     | `contains(field, "val")`, `startsWith(...)`, `endsWith(...)` |
-| Special    | `DEFAULT` — catches all unmatched conditions           |
-
-### Example Rules
-
+```http
+POST   /api/workflows/{workflowId}/steps
+GET    /api/workflows/{workflowId}/steps
+PUT    /api/steps/{id}
+DELETE /api/steps/{id}
 ```
-Priority 1: amount > 100 && country == 'US' && priority == 'High'  → Finance Notification
-Priority 2: amount <= 100 || department == 'HR'                    → CEO Approval
-Priority 3: priority == 'Low' && country != 'US'                   → Task Rejection
-Priority 4: DEFAULT                                                → Task Rejection
-```
-
-- `nextStepId = null` means **end the workflow**
-- Invalid rule expressions log an error and fall through to DEFAULT
-- Loop detection: steps are tracked; if any step is visited more than `app.rule-engine.max-loop-iterations` (default: 10) times, execution fails
 
 ---
 
-## Sample Workflows (Auto-Seeded)
+### 📌 Rules
 
-### 1. Expense Approval
+```http
+POST   /api/steps/{stepId}/rules
+GET    /api/steps/{stepId}/rules
+PUT    /api/rules/{id}
+DELETE /api/rules/{id}
+```
 
-**Input Schema:** `amount` (number, required), `country` (string, required), `department` (string, optional), `priority` (High|Medium|Low, required)
+---
+
+### 📌 Executions
+
+```http
+POST   /api/workflows/{workflowId}/execute
+GET    /api/executions/{id}
+POST   /api/executions/{id}/cancel
+POST   /api/executions/{id}/retry
+GET    /api/executions?workflowId=&status=&page=&size=
+```
+
+---
+
+## 🧠 Rule Engine
+
+* Rules are evaluated **based on priority (lowest first)**
+* Supports dynamic expressions and branching
+
+### ✅ Supported Operators
+
+| Type       | Operators                                  |   |   |
+| ---------- | ------------------------------------------ | - | - |
+| Comparison | `==`, `!=`, `<`, `>`, `<=`, `>=`           |   |   |
+| Logical    | `&&`, `                                    |   | ` |
+| String     | `contains()`, `startsWith()`, `endsWith()` |   |   |
+| Special    | `DEFAULT`                                  |   |   |
+
+---
+
+### 🧾 Example Rules
+
+```text
+1. amount > 100 && country == 'US' && priority == 'High' → Finance Notification
+2. amount <= 100 || department == 'HR'                  → CEO Approval
+3. priority == 'Low' && country != 'US'                 → Task Rejection
+4. DEFAULT                                              → Task Rejection
+```
+
+---
+
+### ⚠️ Rule Notes
+
+* `nextStepId = null` → Ends workflow
+* Invalid rules → fallback to DEFAULT
+* Loop detection → max 10 iterations
+
+---
+
+## 📊 Sample Workflows
+
+### 💰 Expense Approval
+
+**Input:**
+
+* amount (number)
+* country (string)
+* department (optional)
+* priority (High/Medium/Low)
+
+**Flow:**
+
+```
+Manager Approval → Finance Notification → Task Completion
+```
+
+---
+
+### 👨‍💼 Employee Onboarding
 
 **Steps:**
-1. Manager Approval *(approval)*
-2. Finance Notification *(notification)*
-3. CEO Approval *(approval)*
-4. Task Rejection *(task)*
-5. Task Completion *(task)*
 
-**Sample Execution Input:**
+1. HR Notification
+2. IT Setup
+3. Manager Approval (Engineering only)
+4. Onboarding Complete
+
+---
+
+## 📜 Sample Execution Log
+
 ```json
 {
-  "amount": 250,
-  "country": "US",
-  "department": "Finance",
-  "priority": "High"
+  "step_name": "Manager Approval",
+  "status": "completed",
+  "duration_ms": 12,
+  "selected_next_step": "Finance Notification"
 }
 ```
 
-**Expected path:** Manager Approval → Finance Notification → Task Completion
-
 ---
 
-### 2. Employee Onboarding
-
-**Input Schema:** `employee_name`, `department`, `role`, `start_date`
-
-**Steps:**
-1. HR Notification *(notification)*
-2. IT Setup Task *(task)*
-3. Manager Approval *(approval)* — only for Engineering dept
-4. Onboarding Complete *(task)*
-
----
-
-## Sample Execution Log
-
-```json
-[
-  {
-    "step_name": "Manager Approval",
-    "step_type": "approval",
-    "evaluated_rules": [
-      {"rule": "amount > 100 && country == 'US' && priority == 'High'", "result": true},
-      {"rule": "amount <= 100 || department == 'HR'", "result": false}
-    ],
-    "selected_next_step": "Finance Notification",
-    "status": "completed",
-    "duration_ms": 12,
-    "started_at": "2026-03-16T10:00:00",
-    "ended_at": "2026-03-16T10:00:00.012"
-  },
-  {
-    "step_name": "Finance Notification",
-    "step_type": "notification",
-    "evaluated_rules": [
-      {"rule": "amount > 500", "result": false},
-      {"rule": "DEFAULT", "result": true}
-    ],
-    "selected_next_step": "Task Completion",
-    "status": "completed",
-    "duration_ms": 5
-  }
-]
-```
-
----
-
-## Configuration
-
-Key properties in `application.properties`:
+## ⚙️ Configuration
 
 ```properties
-# Database
-spring.datasource.url=jdbc:mysql://localhost:3306/workflow_db?createDatabaseIfNotExist=true
+spring.datasource.url=jdbc:mysql://localhost:3306/workflow_db
 spring.datasource.username=root
 spring.datasource.password=root
 
-# JPA - creates/updates tables automatically
 spring.jpa.hibernate.ddl-auto=update
 
-# Rule engine - max times a step can be visited (loop guard)
 app.rule-engine.max-loop-iterations=10
 
-# CORS - add your frontend origin
 app.cors.allowed-origins=http://localhost:3000,http://localhost:5173
 ```
 
 ---
 
-## UI Features
+## 🖥️ UI Features
 
-| Page | URL | Description |
-|------|-----|-------------|
-| Workflow List | `/workflows` | Search, filter, paginate; Create/Edit/Execute |
-| Workflow Editor | `/workflows/:id/edit` | Steps, rules, schema, start step |
-| Execute Workflow | `/workflows/:id/execute` | Input form, live status, step logs |
-| Audit Log | `/audit` | All executions, stats, cancel/retry, log viewer |
+| Page             | URL                       | Description             |
+| ---------------- | ------------------------- | ----------------------- |
+| Workflow List    | `/workflows`              | Search, filter, execute |
+| Workflow Editor  | `/workflows/{id}/edit`    | Manage steps & rules    |
+| Execute Workflow | `/workflows/{id}/execute` | Run workflow            |
+| Audit Logs       | `/audit`                  | Execution history       |
 
 ---
 
-## Evaluation Checklist
+## ✅ Evaluation Checklist
 
-- [x] **Backend APIs** — CRUD for workflows, steps, rules + execution endpoints
-- [x] **Rule Engine** — Dynamic expression evaluation, priority ordering, DEFAULT fallback, loop guard
-- [x] **Workflow Execution** — Async step execution, rule evaluation logs, cancel, retry
-- [x] **Frontend UI** — Workflow editor, step/rule editor with drag-reorder, live execution view, audit log
-- [x] **Code Quality** — Layered architecture (Controller → Service → Repository), DTOs, exception handling
-- [x] **Documentation** — This README + inline code comments
-- [x] **Sample Workflows** — 2 seeded automatically on first run
-- [x] **Bonus** — Loop detection, branching support, drag-and-drop rule priority, live execution polling
-#   H a l l e y x C h a l l e n g e O N E  
- 
+* ✔ Backend APIs (CRUD + Execution)
+* ✔ Rule Engine (Dynamic + Priority + DEFAULT)
+* ✔ Workflow Execution (Async + Logs + Retry)
+* ✔ Frontend UI (Editor + Execution + Audit)
+* ✔ Clean Architecture (Controller → Service → Repository)
+* ✔ Documentation
+* ✔ Sample Workflows
+* ✔ Bonus Features (Loop detection, branching, drag-drop UI)
+
+---
+
+## 🎯 Summary
+
+This project demonstrates a **production-ready workflow engine** with:
+
+* Scalable backend architecture
+* Dynamic rule evaluation
+* Real-time execution tracking
+* Modern React UI
+
+---
+
