@@ -241,8 +241,8 @@ Manager Approval → Finance Notification → Task Completion
 
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/workflow_db
-spring.datasource.username=root
-spring.datasource.password=root
+spring.datasource.username=yourusername
+spring.datasource.password=yourpassword
 
 spring.jpa.hibernate.ddl-auto=update
 
@@ -264,16 +264,10 @@ app.cors.allowed-origins=http://localhost:3000,http://localhost:5173
 
 ---
 
-## ✅ Evaluation Checklist
+## ✅ Output Screenshots
 
-* ✔ Backend APIs (CRUD + Execution)
-* ✔ Rule Engine (Dynamic + Priority + DEFAULT)
-* ✔ Workflow Execution (Async + Logs + Retry)
-* ✔ Frontend UI (Editor + Execution + Audit)
-* ✔ Clean Architecture (Controller → Service → Repository)
-* ✔ Documentation
-* ✔ Sample Workflows
-* ✔ Bonus Features (Loop detection, branching, drag-drop UI)
+<img width="1920" height="1020" alt="Screenshot 2026-03-18 115440" src="https://github.com/user-attachments/assets/4fbf9e9d-0376-46b6-850d-71f0bb274a84" />
+
 
 ---
 
