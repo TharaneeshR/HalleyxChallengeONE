@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+
+  body {
+    @apply bg-surface text-slate-200 font-sans antialiased;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99,113,246,0.12), transparent),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(168,85,247,0.06), transparent);
+    min-height: 100vh;
+  }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { @apply bg-surface-1; }
+  ::-webkit-scrollbar-thumb { @apply bg-surface-4 rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-brand-600; }
+}
+
+@layer components {
+  .card {
+    @apply bg-surface-1 border border-surface-3 rounded-xl;
+  }
+  .card-hover {
+    @apply card transition-all duration-200 hover:border-brand-600/50 hover:bg-surface-2;
+  }
+  .btn {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm
+           transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-brand-600 hover:bg-brand-500 text-white shadow-lg shadow-brand-900/30;
+  }
+  .btn-secondary {
+    @apply btn bg-surface-3 hover:bg-surface-4 text-slate-200 border border-surface-4;
+  }
+  .btn-danger {
+    @apply btn bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20;
+  }
+  .btn-ghost {
+    @apply btn hover:bg-surface-3 text-slate-400 hover:text-slate-200;
+  }
+  .input {
+    @apply w-full bg-surface-2 border border-surface-4 rounded-lg px-3 py-2 text-sm
+           text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-500
+           focus:ring-1 focus:ring-brand-500/30 transition-colors;
+  }
+  .select {
+    @apply input appearance-none cursor-pointer;
+  }
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  .label {
+    @apply block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wide;
+  }
+  .table-row {
+    @apply border-b border-surface-3 last:border-0 hover:bg-surface-2/50 transition-colors;
+  }
+}
