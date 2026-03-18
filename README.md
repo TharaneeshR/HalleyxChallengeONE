@@ -266,7 +266,7 @@ app.cors.allowed-origins=http://localhost:3000,http://localhost:5173
 
 ## ✅ Output Screenshots
 
-<img width="1920" height="1020" alt="Screenshot 2026-03-18 115440" src="https://github.com/user-attachments/assets/4fbf9e9d-0376-46b6-850d-71f0bb274a84" />
+<img width="500" height="500" alt="Screenshot 2026-03-18 115440" src="https://github.com/user-attachments/assets/4fbf9e9d-0376-46b6-850d-71f0bb274a84" />
 
 
 ---
