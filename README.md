@@ -6,6 +6,9 @@ A full-stack workflow automation system with **dynamic rule evaluation, multi-st
 
 ---
 
+
+Explanation Video:[(https://drive.google.com/drive/folders/1SJK9A3Id1TpNzvKIXTNkabMM2hMZUo_Z?usp=sharing))](url)
+
 ## 🧱 Tech Stack
 
 | Layer      | Technology                                |
@@ -315,4 +318,4 @@ This project demonstrates a **production-ready workflow engine** with:
 
 ---
 
-Explanation Video:[ https://drive.google.com/drive/folders/1SJK9A3Id1TpNzvKIXTNkabMM2hMZUo_Z?usp=sharing](url)
+Explanation Video:[(https://drive.google.com/drive/folders/1SJK9A3Id1TpNzvKIXTNkabMM2hMZUo_Z?usp=sharing))](url)
