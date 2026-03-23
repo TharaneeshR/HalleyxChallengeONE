@@ -7,8 +7,7 @@ A full-stack workflow automation system with **dynamic rule evaluation, multi-st
 ---
 
 
-Explanation Video:https:[//drive.google.com/drive/u/0/folders/1SJK9A3Id1TpNzvKIXTNkabMM2hMZUo_Z
-](url)
+Explanation Video:[https://drive.google.com/drive/u/0/folders/1SJK9A3Id1TpNzvKIXTNkabMM2hMZUo_Z](url)
 ## 🧱 Tech Stack
 
 | Layer      | Technology                                |
